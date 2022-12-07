@@ -154,7 +154,13 @@ impl Grid {
       }
     }
 
-    println!("{}", print_string);
+    use std::io::Write;
+    let mut stdout = std::io::BufWriter::new(std::io::stdout());
+
+    match stdout.write_all(print_string.as_bytes()) {
+      Ok(_) => (),
+      _ => panic!("Unable to draw to the screen: write_all failed!\n"),
+    }
   }
 
   fn run(&mut self, step_duration: std::time::Duration) -> ! {
@@ -178,7 +184,7 @@ const DEFAULT_SYMBOL: char = ' ';
 const ALIVE_SYMBOL:   char = '@';
 
 fn main() {
-  let mut grid = Grid::new(50, 100);
+  let mut grid = Grid::new(60, 30);
 
   grid.modify(|(i, ele)| {
     if i % 7 == 0
